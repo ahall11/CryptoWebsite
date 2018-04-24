@@ -1,0 +1,13 @@
+{
+    "name": "ahall13/163worldproject",
+    "require": {
+        "php": "5.6.35",
+        "vlucas/phpdotenv": "^2.4"
+    },
+    "authors": [
+        {
+            "name": "Alex",
+            "email": "a_hall11@u.pacific.edu"
+        }
+    ]
+}

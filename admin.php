@@ -5,9 +5,7 @@ if (!$db) {
   exit;
 }
 error_reporting(0);
-
 ?>
-
 <!-- Bootstrap stuff -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
@@ -53,6 +51,7 @@ if($_POST['ChooseType']=="INSERT" && $_POST['ChooseTable'] && !$_POST['Edit']){
     ?>
       <input name="ChooseType2" type="hidden" value="<?=$_POST['ChooseType']?>">
       <input name="ChooseTable2" type="hidden" value="<?=$_POST['ChooseTable']?>">
+      <input name="Password" type="hidden" value="comp163">
       <input name="Edit" type="hidden" value="INSERT">
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
@@ -77,6 +76,7 @@ elseif($_POST['ChooseType']=="DELETE" && $_POST['ChooseTable'] && !$_POST['Edit'
       <input type="radio" name="drop" value="deleteall">Drop Entire Table</input>
       <input name="ChooseType2" type="hidden" value="<?=$_POST['ChooseType']?>">
       <input name="ChooseTable2" type="hidden" value="<?=$_POST['ChooseTable']?>">
+      <input name="Password" type="hidden" value="comp163">
       <input name="Edit" type="hidden" value="DELETE">
       <br>
       <br>
@@ -102,6 +102,7 @@ elseif($_POST['ChooseType']=="SELECT" && $_POST['ChooseTable'] && !$_POST['Edit'
     ?>
       <input name="ChooseType2" type="hidden" value="<?=$_POST['ChooseType']?>">
       <input name="ChooseTable2" type="hidden" value="<?=$_POST['ChooseTable']?>">
+      <input name="Password" type="hidden" value="comp163">
       <input name="Edit" type="hidden" value="SELECT">
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
@@ -138,13 +139,13 @@ if($_POST['Edit'] == "INSERT"){
     foreach($row as $key2=>$item){
       if($_POST[$item]){
         foreach($rows2[$key] as $test){
-          if(strpos($test, 'character') !== false){
+          if((strpos($test, 'character') !== false) || (strpos($test, 'timestamp') !== false)){
           $query2 .= "'";
           }
         }
         $query2 .= $_POST[$item];
         foreach($rows2[$key] as $test){
-          if(strpos($test, 'character') !== false){
+          if((strpos($test, 'character') !== false) || (strpos($test, 'timestamp') !== false)){
           $query2 .= "'";
           }
         }
@@ -281,7 +282,31 @@ elseif($_POST['Edit'] == "SELECT"){
     print pg_last_error();
   }
 }
-if(!$_POST['ChooseTable']){
+
+if((!$_POST['ChooseTable']) && ((!$_POST['Password']) || ($_POST['Password']) != "comp163")){
+?>
+<?php
+if($_POST['Password']){
+?>
+<h4>WRONG PASSWORD RENTER</h4>
+<?php
+}
+else{
+?>
+<h4>Enter Password</h4>
+<?php
+}
+?>
+<form name="Sigin" method="post" action="admin.php">
+  <div class="form-group">
+     <input type="password" class="form-control" id="exampleInputEmail1" name="Password" placeholder="Enter password">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<?php
+}
+
+if((!$_POST['ChooseTable']) && ($_POST['Password'] == "comp163")){
 ?>
 <h4>Choose Query</h4>
 <form name="ChoseQuery" method="post" action="admin.php">
@@ -313,7 +338,7 @@ if(!$_POST['ChooseTable']){
 
 <!-- Query entry box -->
 <?php
-if(!$_POST['ChooseTable']){
+if((!$_POST['ChooseTable']) && ($_POST['Password'] == "comp163")){
 ?>
 <h4>Raw Query Tool</h4>
 <form name="SQLQuery" method="post" action="admin.php">

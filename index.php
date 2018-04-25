@@ -45,11 +45,9 @@ error_reporting(0);
   </thead>
   <tbody>
     <?php
-      // $query = "SELECT * FROM coin";
       $query = "SELECT c.Symbol,c.Name,c.Url,c.Max_supply,c.Current_supply,p.Price
                 FROM coin c, current_price p
                 WHERE c.Symbol = p.Symbol AND Purchase_Time = (SELECT MAX(Purchase_Time) FROM current_price p2 WHERE p.Symbol = p2.Symbol)";
-      // Sorting query
       if ($_GET['sort'] == 'symbol'){
         $query .= " ORDER BY c.Symbol";
       }
@@ -60,10 +58,10 @@ error_reporting(0);
         $query .= " ORDER BY p.Price DESC";
       }
       elseif($_GET['sort'] == 'csupply'){
-        $query .= " ORDER BY c.Current_supply DESC";
+        $query .= " ORDER BY c.Current_supply=0, c.Current_supply DESC";
       }
       elseif($_GET['sort'] == 'msupply'){
-        $query .= " ORDER BY CASE WHEN c.Max_supply = 0 then 0 ELSE 1 END + c.Max_supply, c.Max_supply DESC";
+        $query .= " ORDER BY c.Max_supply=0, c.Max_supply DESC";
       }
       elseif($_GET['sort'] == 'mcap'){
         $query .= " ORDER BY (c.Current_supply * p.Price) DESC";
@@ -71,13 +69,15 @@ error_reporting(0);
       else{
         $query .= " ORDER BY (c.Current_supply * p.Price) DESC";
       }
-      // ORDER BY c.Current_supply*p.Price DESC
       $result = pg_query($db, $query);
       $i = 1;
       while($row = pg_fetch_row($result)){
         $mc=$row[4]*$row[5];
         if(!$row[3]){
           $row[3]=0;
+        }
+        if(!$row[4]){
+          $row[4]=0;
         }
         ?>
         <tr class='clickable-row' data-href='coin.php?symbol=<?=$row[0]?>'>
@@ -90,25 +90,10 @@ error_reporting(0);
           <td><?= $row[3] ?></td>
         </tr>
         </input>
-        <!-- print $row[1] . "\n"; -->
         <?php
         $i++;
       }
-      // print result;
     ?>
-
-<!--     <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr> -->
   </tbody>
 </table>
 

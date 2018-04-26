@@ -39,6 +39,7 @@ error_reporting(0);
   $check = pg_fetch_row($result);
   if(!$check){
     ?>
+    <br>
     <h2>There is currently no coin with the symbol, <?=$_GET['symbol']?>.</h2>
     <br><br>
     <h4>Here is the list of coin symbols:</h4>
@@ -80,7 +81,9 @@ error_reporting(0);
       $result = pg_query($db, $query);
       $url = pg_fetch_row($result);
     ?>
-    <h1><a href="<?=$url[0]?>"><?=$url[1]?></a></h1>
+    <br>
+    <h2><a href="<?=$url[0]?>"><?=$url[1]?></a></h2>
+    <br>
 
     <!-- Members -->
     <h4>Team Members</h4>
@@ -120,6 +123,7 @@ error_reporting(0);
         ?>
       </tbody>
     </table>
+    <br>
 
     <!-- Trades -->
     <h4>Most Recent Trades</h4>

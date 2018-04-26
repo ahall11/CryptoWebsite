@@ -31,6 +31,9 @@ error_reporting(0);
   </div>
 </nav>
 
+<br>
+<h3>Top Crypto Currency Coins</h3>
+<br>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -64,10 +67,10 @@ error_reporting(0);
         $query .= " ORDER BY c.Max_supply=0, c.Max_supply DESC";
       }
       elseif($_GET['sort'] == 'mcap'){
-        $query .= " ORDER BY (c.Current_supply * p.Price) DESC";
+        $query .= " ORDER BY (c.Current_supply * p.Price)=0, (c.Current_supply * p.Price) DESC";
       }
       else{
-        $query .= " ORDER BY (c.Current_supply * p.Price) DESC";
+        $query .= " ORDER BY (c.Current_supply * p.Price)=0, (c.Current_supply * p.Price) DESC";
       }
       $result = pg_query($db, $query);
       $i = 1;

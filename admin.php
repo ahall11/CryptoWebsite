@@ -21,6 +21,9 @@ error_reporting(0);
         <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="query.php">Query</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="admin.php">Admin</a>
       </li>
     </ul>
@@ -31,6 +34,14 @@ error_reporting(0);
   </div>
 </nav>
 
+<!-- Get password -->
+<?php
+  $query = "SELECT admin_password FROM settings";
+  $result = pg_query($db, $query);
+  $password = pg_fetch_row($result)[0];
+?>
+
+<!-- -->
 <h1>Admin Panel</h1>
 <?php
 if($_POST['ChooseType']=="INSERT" && $_POST['ChooseTable'] && !$_POST['Edit']){
@@ -51,7 +62,7 @@ if($_POST['ChooseType']=="INSERT" && $_POST['ChooseTable'] && !$_POST['Edit']){
     ?>
       <input name="ChooseType2" type="hidden" value="<?=$_POST['ChooseType']?>">
       <input name="ChooseTable2" type="hidden" value="<?=$_POST['ChooseTable']?>">
-      <input name="Password" type="hidden" value="comp163">
+      <input name="Password" type="hidden" value="<?=$password?>">
       <input name="Edit" type="hidden" value="INSERT">
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
@@ -76,7 +87,7 @@ elseif($_POST['ChooseType']=="DELETE" && $_POST['ChooseTable'] && !$_POST['Edit'
       <input type="radio" name="drop" value="deleteall">Drop Entire Table</input>
       <input name="ChooseType2" type="hidden" value="<?=$_POST['ChooseType']?>">
       <input name="ChooseTable2" type="hidden" value="<?=$_POST['ChooseTable']?>">
-      <input name="Password" type="hidden" value="comp163">
+      <input name="Password" type="hidden" value="<?=$password?>">
       <input name="Edit" type="hidden" value="DELETE">
       <br>
       <br>
@@ -102,7 +113,7 @@ elseif($_POST['ChooseType']=="SELECT" && $_POST['ChooseTable'] && !$_POST['Edit'
     ?>
       <input name="ChooseType2" type="hidden" value="<?=$_POST['ChooseType']?>">
       <input name="ChooseTable2" type="hidden" value="<?=$_POST['ChooseTable']?>">
-      <input name="Password" type="hidden" value="comp163">
+      <input name="Password" type="hidden" value="<?=$password?>">
       <input name="Edit" type="hidden" value="SELECT">
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
@@ -283,7 +294,7 @@ elseif($_POST['Edit'] == "SELECT"){
   }
 }
 
-if((!$_POST['ChooseTable']) && ((!$_POST['Password']) || ($_POST['Password']) != "comp163")){
+if((!$_POST['ChooseTable']) && ((!$_POST['Password']) || ($_POST['Password']) != $password)){
 ?>
 <?php
 if($_POST['Password']){
@@ -306,7 +317,7 @@ else{
 <?php
 }
 
-if((!$_POST['ChooseTable']) && ($_POST['Password'] == "comp163")){
+if((!$_POST['ChooseTable']) && ($_POST['Password'] == $password)){
 ?>
 <h4>Choose Query</h4>
 <form name="ChoseQuery" method="post" action="admin.php">
@@ -328,6 +339,7 @@ if((!$_POST['ChooseTable']) && ($_POST['Password'] == "comp163")){
       <option>isateam</option>
       <option>price</option>
       <option>team_member</option>
+      <option>settings</option>
     </select>
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
@@ -338,7 +350,7 @@ if((!$_POST['ChooseTable']) && ($_POST['Password'] == "comp163")){
 
 <!-- Query entry box -->
 <?php
-if((!$_POST['ChooseTable']) && ($_POST['Password'] == "comp163")){
+if((!$_POST['ChooseTable']) && ($_POST['Password'] == $password)){
 ?>
 <h4>Raw Query Tool</h4>
 <form name="SQLQuery" method="post" action="admin.php">

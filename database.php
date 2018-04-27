@@ -7,5 +7,5 @@
 	print $dbopts["user"];
 	print $dbopts["pass"];
 	print ltrim($dbopts["path"], "/");
-	$db = pg_connect(sprintf("host=%s dbname=%s user=%s password=%s", $dbopts["host"], $dbopts["user"], $dbopts["pass"], ltrim($dbopts["path"], "/")));
+	$db = pg_connect(sprintf("host=%s dbname=%s user=%s password=%s", $dbopts["host"], ltrim($dbopts["path"], "/"), $dbopts["user"], $dbopts["pass"]));
 ?>
